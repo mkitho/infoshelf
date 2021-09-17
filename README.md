@@ -1,6 +1,6 @@
 #  Infoshelf
 
-A searchable information system made searchable with OpenSearch on AWS. It uses Lambda functions to regularly scrape latest data from your desired websites, parse, and upload for indexed search.
+A information system made searchable with OpenSearch on AWS. It uses Lambda functions to regularly scrape latest data from your desired websites, parse, and upload for indexed search.
 
 The demo is designed to track details of medical professionals on [Singapore Medical Council](https://prs.moh.gov.sg/prs/internet/profSearch/mshowSearchSummaryByName.action?hpe=SMC) for some work-related purpose, but this approach can easily be re-purposed for any other application. While doing so, please respect the website owner by limiting the rate of requests.
 
