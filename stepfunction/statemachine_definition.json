@@ -1,0 +1,62 @@
+{
+  "Comment": "search doctor on MOH website then uploads to Opensearch",
+  "StartAt": "DocIterator",
+  "States": {
+    "DocIterator": {
+      "Type": "Map",
+      "Iterator": {
+        "StartAt": "Search doctor",
+        "States": {
+          "Search doctor": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:ap-southeast-1:824636011153:function:search_doctor:$LATEST",
+              "Payload.$": "$"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
+            "Next": "Upload doctor",
+            "ResultPath": null
+          },
+          "Upload doctor": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:ap-southeast-1:824636011153:function:parse_html:$LATEST",
+              "Payload.$": "$"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
+            "End": true
+          }
+        }
+      },
+      "End": true,
+      "ItemsPath": "$.mcrlist",
+      "InputPath": "$",
+      "MaxConcurrency": 2
+    }
+  },
+  "TimeoutSeconds": 60
+}
